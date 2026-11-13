@@ -12,25 +12,23 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .glow-cyan { box-shadow: 0 0 25px rgba(6, 182, 212, 0.15); }
-        .glow-emerald { box-shadow: 0 0 25px rgba(16, 185, 129, 0.15); }
     </style>
 </head>
 <body class="bg-slate-950 flex items-center justify-center min-h-screen p-0 sm:p-4 text-slate-100">
 
-    <!-- 9:16 High-Tech Telemetry Container -->
+    <!-- Mobile Device Container -->
     <div class="w-full sm:max-w-[420px] h-screen sm:h-[844px] bg-slate-950 text-slate-100 flex flex-col relative sm:rounded-[40px] sm:border-[8px] sm:border-slate-800 shadow-2xl overflow-hidden border-cyan-500/20">
         
-        <!-- Tech Status Bar -->
+        <!-- Status Bar -->
         <div class="w-full bg-slate-950/90 backdrop-blur px-6 py-3 flex justify-between items-center text-xs font-mono text-cyan-400 z-50 select-none border-b border-cyan-950">
             <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span><span>SYS.ONLINE</span></span>
             <div class="w-24 h-4 bg-slate-900 rounded-full mx-auto absolute left-1/2 -translate-x-1/2 top-2 border border-cyan-500/20"></div>
-            <span>SECURE // v2.6</span>
+            <span>SECURE</span>
         </div>
 
-        <!-- APP CONTAINER -->
         <div id="app" class="flex-1 overflow-y-auto no-scrollbar flex flex-col relative">
             
-            <!-- VIEW 1: TECH LOGIN INTERFACE -->
+            <!-- VIEW 1: LOGIN PAGE -->
             <div id="login-view" class="flex-1 flex flex-col justify-between p-6 bg-gradient-to-b from-cyan-950/40 via-slate-950 to-slate-950">
                 <div class="pt-6 text-center">
                     <div class="w-20 h-20 bg-cyan-950/80 border border-cyan-500/40 rounded-2xl mx-auto flex items-center justify-center mb-4 text-cyan-400 glow-cyan relative">
@@ -55,7 +53,7 @@
                         </div>
                     </div>
 
-                    <div id="login-error" class="text-xs font-mono text-rose-400 hidden bg-rose-950/40 border border-rose-500/30 p-2.5 rounded-lg text-center">ACCESS DENIED: Credentials mismatch.</div>
+                    <div id="login-error" class="text-xs font-mono text-rose-400 hidden bg-rose-950/40 border border-rose-500/30 p-2.5 rounded-lg text-center">ACCESS DENIED: Invalid Credentials.</div>
 
                     <button onclick="handleLogin()" id="login-btn" class="w-full bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-slate-950 font-bold py-3.5 rounded-xl transition shadow-lg shadow-cyan-500/20 text-xs font-mono uppercase tracking-widest">
                         Initialize Session
@@ -63,54 +61,49 @@
                 </div>
 
                 <div class="text-center text-[10px] font-mono text-cyan-500/60 pb-2">
-                    SYNCED TO GOOGLE SHEET // XDP WATER WORKS
+                    LIVE SYNC // XDP WATER WORKS
                 </div>
             </div>
 
-            <!-- VIEW 2: CONSUMER TELEMETRY DASHBOARD -->
+            <!-- VIEW 2: DASHBOARD -->
             <div id="dashboard-view" class="flex-1 flex flex-col hidden bg-slate-950">
-                <!-- Header Card -->
                 <div class="p-4 bg-slate-900/90 border-b border-cyan-500/20 flex justify-between items-center backdrop-blur">
                     <div>
                         <span class="text-[10px] font-mono uppercase tracking-wider text-cyan-400 block">CONSUMER ACCOUNT</span>
                         <h2 id="dash-name" class="text-sm font-extrabold text-white font-mono uppercase tracking-wide">---</h2>
                         <p id="dash-purok" class="text-[11px] font-mono text-slate-400">--- // ACCT: <span id="dash-acct-code" class="text-cyan-400">---</span></p>
                     </div>
-                    <button onclick="handleLogout()" class="bg-slate-950 hover:bg-slate-900 border border-cyan-500/30 p-2 rounded-xl text-cyan-400 hover:text-white transition text-[11px] font-mono flex items-center space-x-1.5 shadow-lg">
+                    <button onclick="handleLogout()" class="bg-slate-950 border border-cyan-500/30 p-2 rounded-xl text-cyan-400 hover:text-white transition text-[11px] font-mono flex items-center space-x-1.5">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                         <span>EXIT</span>
                     </button>
                 </div>
 
                 <div class="p-4 space-y-4 flex-1 overflow-y-auto">
-                    <!-- Metrics Grid -->
+                    
+                    <!-- Top Telemetry Cards -->
                     <div class="grid grid-cols-2 gap-3 font-mono">
-                        <div class="bg-slate-900/60 border border-cyan-500/20 p-3 rounded-2xl relative overflow-hidden">
-                            <div class="absolute top-0 right-0 w-8 h-8 bg-cyan-500/5 rounded-bl-xl"></div>
+                        <div class="bg-slate-900/60 border border-cyan-500/20 p-3 rounded-2xl relative">
                             <span class="text-[10px] text-slate-400 block tracking-wider">PREV READING</span>
                             <span id="dash-prev" class="text-xl font-bold text-white mt-1 block">0</span>
                         </div>
-                        <div class="bg-slate-900/60 border border-cyan-500/20 p-3 rounded-2xl relative overflow-hidden">
-                            <div class="absolute top-0 right-0 w-8 h-8 bg-cyan-500/5 rounded-bl-xl"></div>
+                        <div class="bg-slate-900/60 border border-cyan-500/20 p-3 rounded-2xl relative">
                             <span class="text-[10px] text-slate-400 block tracking-wider">CURR READING</span>
                             <span id="dash-curr" class="text-xl font-bold text-white mt-1 block">0</span>
                         </div>
-                        <div class="bg-slate-900/60 border border-cyan-500/20 p-3 rounded-2xl relative overflow-hidden">
-                            <div class="absolute top-0 right-0 w-8 h-8 bg-cyan-500/5 rounded-bl-xl"></div>
+                        <div class="bg-slate-900/60 border border-cyan-500/20 p-3 rounded-2xl relative">
                             <span class="text-[10px] text-cyan-400 block tracking-wider">CONSUMPTION</span>
                             <span id="dash-cons" class="text-xl font-bold text-cyan-400 mt-1 block">0 cu.m</span>
                         </div>
-                        <div class="bg-slate-900/60 border border-cyan-500/20 p-3 rounded-2xl relative overflow-hidden">
-                            <div class="absolute top-0 right-0 w-8 h-8 bg-emerald-500/5 rounded-bl-xl"></div>
+                        <div class="bg-slate-900/60 border border-cyan-500/20 p-3 rounded-2xl relative">
                             <span class="text-[10px] text-slate-400 block tracking-wider">CURRENT CHARGE</span>
                             <span id="dash-charge" class="text-xl font-bold text-emerald-400 mt-1 block">0</span>
                         </div>
                     </div>
 
-                    <!-- Balance Status Banner -->
                     <div class="bg-slate-900/80 border border-cyan-500/30 p-4 rounded-2xl flex justify-between items-center font-mono">
                         <div>
-                            <span class="text-[10px] text-cyan-400 block tracking-widest">TOTAL BALANCE DUE</span>
+                            <span class="text-[10px] text-cyan-400 block tracking-widest">LATEST BALANCE DUE</span>
                             <span id="dash-balance" class="text-3xl font-black text-white mt-0.5 block">₱0.00</span>
                         </div>
                         <span id="dash-status-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">PAID</span>
@@ -119,7 +112,7 @@
                     <!-- Complete Monthly Billing History Table -->
                     <div class="bg-slate-900/60 border border-cyan-500/20 rounded-2xl overflow-hidden font-mono">
                         <div class="bg-slate-900 px-3.5 py-2.5 border-b border-cyan-500/20 flex justify-between items-center text-xs">
-                            <span class="font-bold text-cyan-400 flex items-center space-x-1.5"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg><span>BILLING HISTORY (BY MONTH)</span></span>
+                            <span class="font-bold text-cyan-400 flex items-center space-x-1.5"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg><span>BILLING HISTORY</span></span>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-[11px]">
@@ -133,21 +126,19 @@
                                         <th class="p-2.5 text-center">Status</th>
                                         <th class="p-2.5 text-emerald-400">Amount_Paid</th>
                                         <th class="p-2.5 font-bold text-cyan-400">Balance_Due</th>
-                                        <th class="p-2.5 text-center">Action</th>
+                                        <th class="p-2.5 text-center">View</th>
                                     </tr>
                                 </thead>
                                 <tbody id="billing-table-body" class="divide-y divide-slate-800/60 text-slate-300">
-                                    <!-- Populated dynamically from Readings_Bills -->
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
 
-        <!-- 57mm Thermal Receipt Modal -->
+        <!-- Receipt Modal -->
         <div id="receipt-modal" class="absolute inset-0 bg-slate-950/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
             <div class="bg-white text-slate-900 w-full max-w-[320px] p-5 rounded-2xl shadow-2xl relative font-mono text-xs border-2 border-slate-900">
                 <button onclick="closeReceipt()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-900 font-sans font-bold text-sm">✕</button>
@@ -187,20 +178,14 @@
 
                 <div class="pt-3 text-center">
                     <img id="rec-qr" src="" alt="QR Verification" class="w-20 h-20 mx-auto mb-1 border border-slate-200 p-1">
-                    <p class="text-[9px] text-slate-500">Scan QR to verify bill online</p>
-                    <p class="text-[10px] font-bold mt-1">THANK YOU!</p>
+                    <p class="text-[9px] text-slate-500">Scan QR to verify</p>
                 </div>
             </div>
         </div>
-
-        <div class="w-full bg-slate-950 py-2 flex justify-center items-center border-t border-cyan-500/20">
-            <div class="w-32 h-1 bg-cyan-500/30 rounded-full"></div>
-        </div>
-
     </div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjxtE9lpjPcr9CiOmkP_tHDDlju95YtCOQ_qROQPODtutkkTmZAiKf9LktkuMzutAZ4w/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwI9zv_NW5CrgGnJES4LXfUg4ReX048MNI_XTEC3_BNn7ILgAhy5ZCsFvtvbscoqr_y6A/exec";
 
         async function handleLogin() {
             const inputName = document.getElementById('login-name').value.trim().toUpperCase();
@@ -241,7 +226,7 @@
             document.getElementById('dashboard-view').classList.remove('hidden');
 
             document.getElementById('dash-name').innerText = consumer.fullName;
-            document.getElementById('dash-purok').innerText = consumer.purokAddress || "BRGY. CONSORCIA";
+            document.getElementById('dash-purok').innerText = consumer.purokAddress;
             document.getElementById('dash-acct-code').innerText = consumer.accountNo;
             document.getElementById('dash-prev').innerText = consumer.prevReading;
             document.getElementById('dash-curr').innerText = consumer.currReading;
@@ -250,12 +235,13 @@
             document.getElementById('dash-balance').innerText = "₱" + Number(consumer.balanceDue).toLocaleString();
 
             const statusBadge = document.getElementById('dash-status-badge');
-            if (consumer.balanceDue > 0) {
-                statusBadge.className = "px-3 py-1 rounded-full text-xs font-mono font-bold bg-rose-500/20 text-rose-400 border border-rose-500/40";
-                statusBadge.innerText = "UNPAID";
-            } else {
+            const isPaid = consumer.latestStatus === "PAID" || consumer.balanceDue <= 0;
+            if (isPaid) {
                 statusBadge.className = "px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40";
                 statusBadge.innerText = "PAID";
+            } else {
+                statusBadge.className = "px-3 py-1 rounded-full text-xs font-mono font-bold bg-rose-500/20 text-rose-400 border border-rose-500/40";
+                statusBadge.innerText = "UNPAID";
             }
 
             const tableBody = document.getElementById('billing-table-body');
@@ -263,7 +249,7 @@
             
             if (bills && bills.length > 0) {
                 bills.forEach(bill => {
-                    const isPaid = bill.status === "PAID" || bill.balanceDue <= 0;
+                    const rowIsPaid = bill.status === "PAID" || bill.balanceDue <= 0;
                     tableBody.innerHTML += `
                         <tr class="hover:bg-cyan-950/20 transition">
                             <td class="p-2.5 font-bold text-cyan-300">${bill.billingMonth}</td>
@@ -272,14 +258,14 @@
                             <td class="p-2.5 text-slate-400">₱${Number(bill.arrears).toLocaleString()}</td>
                             <td class="p-2.5 font-bold text-white">₱${Number(bill.amountDue).toLocaleString()}</td>
                             <td class="p-2.5 text-center">
-                                <span class="px-2 py-0.5 rounded text-[9px] font-bold ${isPaid ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'}">
-                                    ${bill.status || (isPaid ? 'PAID' : 'UNPAID')}
+                                <span class="px-2 py-0.5 rounded text-[9px] font-bold ${rowIsPaid ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'}">
+                                    ${bill.status || (rowIsPaid ? 'PAID' : 'UNPAID')}
                                 </span>
                             </td>
                             <td class="p-2.5 text-emerald-400">₱${Number(bill.amountPaid).toLocaleString()}</td>
                             <td class="p-2.5 font-bold text-cyan-400">₱${Number(bill.balanceDue).toLocaleString()}</td>
                             <td class="p-2.5 text-center">
-                                <button onclick='openReceipt(${JSON.stringify(bill)}, "${consumer.accountNo}", "${consumer.fullName}")' class="bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 p-1.5 rounded-lg transition border border-cyan-500/30" title="View Statement">
+                                <button onclick='openReceipt(${JSON.stringify(bill)}, "${consumer.accountNo}", "${consumer.fullName}")' class="bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 p-1.5 rounded-lg transition border border-cyan-500/30">
                                     <svg class="w-3.5 h-3.5 mx-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                 </button>
                             </td>
@@ -287,14 +273,13 @@
                     `;
                 });
             } else {
-                tableBody.innerHTML = `<tr><td colspan="9" class="p-4 text-center text-slate-500">No telemetry billing records found in Readings_Bills.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="9" class="p-4 text-center text-slate-500">No records found.</td></tr>`;
             }
         }
 
         function handleLogout() {
             document.getElementById('dashboard-view').classList.add('hidden');
             document.getElementById('login-view').classList.remove('hidden');
-            document.getElementById('login-name').value = '';
             document.getElementById('login-pwd').value = '';
         }
 
@@ -317,7 +302,6 @@
 
             const qrData = encodeURIComponent(`DALCON-${acctCode}-${bill.billId || '001'}`);
             document.getElementById('rec-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrData}`;
-
             document.getElementById('receipt-modal').classList.remove('hidden');
         }
 
