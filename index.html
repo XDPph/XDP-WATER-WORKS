@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dalcon Waterworks — Consumer Portal</title>
+    <title>Dalcon Waterworks — Consumer Account Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -243,7 +243,7 @@
             box-shadow: 0 0 12px rgba(255, 80, 80, 0.3);
         }
 
-        /* Live Telemetry Cards */
+        /* Live Account Grid */
         .telemetry-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -480,7 +480,7 @@
                 <div class="brand-icon">DW</div>
                 <div class="brand-text">
                     <h1>Dalcon Waterworks</h1>
-                    <span>Consumer Telemetry Portal</span>
+                    <span>Consumer Account Portal</span>
                 </div>
             </div>
             <div id="header-status" style="font-size: 0.8rem; color: var(--text-muted);">
@@ -492,14 +492,18 @@
         <div id="login-screen">
             <div class="login-card">
                 <h2>Consumer Authentication</h2>
-                <p>Enter your full name as registered in the database to access your billing telemetry.</p>
+                <p>Enter your username and password as registered in the database to access your billing account.</p>
                 <form id="login-form" onsubmit="handleLogin(event)">
                     <div class="form-group">
-                        <label for="fullNameInput">Full Name</label>
-                        <input type="text" id="fullNameInput" class="form-control" placeholder="e.g. JUAN DELA CRUZ" required autocomplete="name">
+                        <label for="usernameInput">Username</label>
+                        <input type="text" id="usernameInput" class="form-control" placeholder="Enter username" required autocomplete="username">
                     </div>
-                    <div class="error-msg" id="loginError">Consumer record not detected in database.</div>
-                    <button type="submit" class="btn-cyber">Access Telemetry</button>
+                    <div class="form-group">
+                        <label for="passwordInput">Password</label>
+                        <input type="password" id="passwordInput" class="form-control" placeholder="Enter password" required autocomplete="current-password">
+                    </div>
+                    <div class="error-msg" id="loginError">Invalid username or password.</div>
+                    <button type="submit" class="btn-cyber">Access Account</button>
                 </form>
             </div>
         </div>
@@ -514,7 +518,7 @@
                 <button class="btn-logout" onclick="handleLogout()">Terminate Session</button>
             </div>
 
-            <!-- Real-time Telemetry Grid -->
+            <!-- Real-time Account Grid -->
             <div class="telemetry-grid">
                 <div class="telemetry-card">
                     <div class="telemetry-header">
@@ -583,15 +587,6 @@
 
         let currentConsumerRecords = [];
 
-        // Check localStorage on page load to persist session across refreshes
-        window.addEventListener("DOMContentLoaded", () => {
-            const savedName = localStorage.getItem("dalcon_consumer_name");
-            if (savedName) {
-                // Automatically fetch and restore session without requiring login again
-                fetchConsumerDataSilent(savedName);
-            }
-        });
-
         function showLoader(text = "PROCESSING REQUEST...") {
             document.getElementById("loader-txt").innerText = text;
             document.getElementById("loader").style.display = "flex";
@@ -603,29 +598,19 @@
 
         async function handleLogin(e) {
             e.preventDefault();
-            const inputName = document.getElementById("fullNameInput").value.trim().toUpperCase();
+            const username = document.getElementById("usernameInput").value.trim();
+            const password = document.getElementById("passwordInput").value.trim();
             const errorEl = document.getElementById("loginError");
             errorEl.style.display = "none";
 
-            if (!inputName) return;
+            if (!username || !password) return;
 
             showLoader("AUTHENTICATING CONSUMER...");
-            await executeFetchAndRender(inputName, errorEl);
-            hideLoader();
-        }
 
-        async function fetchConsumerDataSilent(inputName) {
-            showLoader("RESTORING SECURE SESSION...");
-            const errorEl = document.getElementById("loginError");
-            await executeFetchAndRender(inputName, errorEl, true);
-            hideLoader();
-        }
-
-        async function executeFetchAndRender(inputName, errorEl, isRestoring = false) {
             try {
-                // Demo fallback if SCRIPT_URL is placeholder
+                // If SCRIPT_URL is still placeholder, use demo simulation for instant preview matching B (Username) and G (Password)
                 if (SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT")) {
-                    await new Promise(r => setTimeout(r, 800));
+                    await new Promise(r => setTimeout(r, 1000));
                     currentConsumerRecords = [
                         {
                             Billing_Month: "NOVEMBER 2026",
@@ -640,51 +625,28 @@
                             Amount_Paid: 460.00,
                             Balance_Due: 0.00,
                             Payment_Date: "2026-11-11"
-                        },
-                        {
-                            Billing_Month: "OCTOBER 2026",
-                            Reading_Date: "2026-10-10",
-                            Prev_Reading: 120,
-                            Curr_Reading: 145,
-                            Consumption: 25,
-                            Current_Charge: 500.00,
-                            Arrears: 50.00,
-                            Amount_Due: 550.00,
-                            Payment_Status: "PAID",
-                            Amount_Paid: 550.00,
-                            Balance_Due: 0.00,
-                            Payment_Date: "2026-10-12"
                         }
                     ];
-                    // Save session state to localStorage
-                    localStorage.setItem("dalcon_consumer_name", inputName);
-                    renderDashboard(inputName, currentConsumerRecords);
+                    renderDashboard(username.toUpperCase(), currentConsumerRecords);
+                    hideLoader();
                     return;
                 }
 
-                const response = await fetch(`${SCRIPT_URL}?action=getConsumer&name=${encodeURIComponent(inputName)}`);
+                const response = await fetch(`${SCRIPT_URL}?action=getConsumer&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
                 const result = await response.json();
 
                 if (result.status === "success" && result.data && result.data.length > 0) {
                     currentConsumerRecords = result.data;
-                    localStorage.setItem("dalcon_consumer_name", inputName);
-                    renderDashboard(inputName, currentConsumerRecords);
+                    renderDashboard(result.fullName || username.toUpperCase(), currentConsumerRecords);
                 } else {
-                    if (isRestoring) {
-                        // If stored name is invalid/removed from sheet, clear session
-                        localStorage.removeItem("dalcon_consumer_name");
-                    } else {
-                        errorEl.style.display = "block";
-                    }
+                    errorEl.style.display = "block";
                 }
             } catch (err) {
                 console.error(err);
-                if (!isRestoring) {
-                    errorEl.innerText = "Connection error. Verify Web App URL.";
-                    errorEl.style.display = "block";
-                } else {
-                    localStorage.removeItem("dalcon_consumer_name");
-                }
+                errorEl.innerText = "Connection error. Verify Web App URL.";
+                errorEl.style.display = "block";
+            } finally {
+                hideLoader();
             }
         }
 
@@ -745,10 +707,9 @@
         }
 
         function handleLogout() {
-            // Clear persistent session
-            localStorage.removeItem("dalcon_consumer_name");
             currentConsumerRecords = [];
-            document.getElementById("fullNameInput").value = "";
+            document.getElementById("usernameInput").value = "";
+            document.getElementById("passwordInput").value = "";
             document.getElementById("dashboard-screen").style.display = "none";
             document.getElementById("login-screen").style.display = "flex";
         }
@@ -760,21 +721,25 @@
       ========================================================================
       
       function doGet(e) {
-        var action = e.parameter.action;
-        var nameInput = String(e.parameter.name || "").trim().toUpperCase();
+        var usernameInput = String(e.parameter.username || "").trim();
+        var passwordInput = String(e.parameter.password || "").trim();
         
         var ss = SpreadsheetApp.getActiveSpreadsheet();
         var sheet = ss.getSheetByName("CONSUMERS"); // Ensure exact tab name
         var data = sheet.getDataRange().getValues();
         
         var results = [];
+        var matchedFullName = "";
         
         // Loop through rows starting from row 2 (index 1)
         for (var i = 1; i < data.length; i++) {
           var row = data[i];
-          var fullName = String(row[2] || "").trim().toUpperCase(); // Assuming Full_Name is in Col C (Index 2)
+          var usernameCol = String(row[1] || "").trim(); // Column B (index 1)
+          var passwordCol = String(row[6] || "").trim(); // Column G (index 6)
+          var fullNameCol = String(row[2] || "").trim(); // Column C (index 2) - Full Name
           
-          if (fullName === nameInput) {
+          if (usernameCol === usernameInput && passwordCol === passwordInput) {
+            matchedFullName = fullNameCol;
             results.push({
               Billing_Month: row[11],    // L
               Reading_Date: row[14],     // O
@@ -792,9 +757,15 @@
           }
         }
         
-        return ContentService
-          .createTextOutput(JSON.stringify({ status: "success", data: results }))
-          .setMimeType(ContentService.MimeType.JSON);
+        if (results.length > 0) {
+          return ContentService
+            .createTextOutput(JSON.stringify({ status: "success", fullName: matchedFullName, data: results }))
+            .setMimeType(ContentService.MimeType.JSON);
+        } else {
+          return ContentService
+            .createTextOutput(JSON.stringify({ status: "error", message: "Invalid credentials" }))
+            .setMimeType(ContentService.MimeType.JSON);
+        }
       }
       ========================================================================
     -->
