@@ -19,7 +19,7 @@
         
         <!-- Mobile Status Bar Notch -->
         <div class="w-full bg-slate-950 px-6 py-3 flex justify-between items-center text-xs font-semibold text-slate-400 z-50 select-none">
-            <span>9:38 PM</span>
+            <span>9:45 PM</span>
             <div class="w-24 h-4 bg-slate-900 rounded-full mx-auto absolute left-1/2 -translate-x-1/2 top-2"></div>
             <div class="flex items-center space-x-1">
                 <span>5G</span>
@@ -49,12 +49,12 @@
                             <input type="text" id="login-name" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white uppercase focus:outline-none focus:border-cyan-500 transition">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Password (Account Code)</label>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Password (PASSEND)</label>
                             <input type="password" id="login-pwd" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500 transition">
                         </div>
                     </div>
 
-                    <div id="login-error" class="text-xs text-rose-400 hidden">Invalid Full Name or Account Code. Please try again.</div>
+                    <div id="login-error" class="text-xs text-rose-400 hidden">Invalid Full Name or Password. Please try again.</div>
 
                     <button onclick="handleLogin()" id="login-btn" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3.5 rounded-xl transition shadow-lg shadow-cyan-500/20 text-sm">
                         Access My Account
@@ -189,7 +189,7 @@
     </div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWQVsEKl7Ks_JgK1eJZhZUKs6U99B5NHANH5eO4VVDLoAx9cPUUibqOj22lXBK5Z7D2g/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjxtE9lpjPcr9CiOmkP_tHDDlju95YtCOQ_qROQPODtutkkTmZAiKf9LktkuMzutAZ4w/exec";
 
         async function handleLogin() {
             const inputName = document.getElementById('login-name').value.trim().toUpperCase();
@@ -198,7 +198,7 @@
             const loginBtn = document.getElementById('login-btn');
 
             if (!inputName || !inputPwd) {
-                errorEl.innerText = "Please enter both Full Name and Account Code.";
+                errorEl.innerText = "Please enter both Full Name and Password.";
                 errorEl.classList.remove('hidden');
                 return;
             }
@@ -213,7 +213,7 @@
                     errorEl.classList.add('hidden');
                     loadDashboard(result.consumer, result.bills);
                 } else {
-                    errorEl.innerText = "Invalid Full Name or Account Code / Password.";
+                    errorEl.innerText = "Invalid Full Name or Password.";
                     errorEl.classList.remove('hidden');
                 }
             } catch (err) {
@@ -262,7 +262,7 @@
                             <td class="p-2.5 font-bold text-white">${bill.balanceDue}</td>
                             <td class="p-2.5 text-center">
                                 <button onclick='openReceipt(${JSON.stringify(bill)}, "${consumer.accountNo}", "${consumer.fullName}")' class="bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 p-1.5 rounded-lg transition" title="View Receipt">
-                                    <svg class="w-4 h-4 mx-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                    <svg class="w-4 h-4 mx-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1,1 0 01.707.293l5.414 5.414a1,1 0 01.293.707V19a2,2 0 01-2 2z"/></svg>
                                 </button>
                             </td>
                         </tr>
