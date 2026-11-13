@@ -19,7 +19,7 @@
         
         <!-- Mobile Status Bar Notch -->
         <div class="w-full bg-slate-950 px-6 py-3 flex justify-between items-center text-xs font-semibold text-slate-400 z-50 select-none">
-            <span>9:45 PM</span>
+            <span>10:10 PM</span>
             <div class="w-24 h-4 bg-slate-900 rounded-full mx-auto absolute left-1/2 -translate-x-1/2 top-2"></div>
             <div class="flex items-center space-x-1">
                 <span>5G</span>
@@ -127,7 +127,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="billing-table-body" class="divide-y divide-slate-800/60 text-slate-300">
-                                    <!-- Populated via Google Sheet live API -->
+                                    <!-- Populated via Readings_Bills records -->
                                 </tbody>
                             </table>
                         </div>
@@ -230,7 +230,7 @@
             document.getElementById('dashboard-view').classList.remove('hidden');
 
             document.getElementById('dash-name').innerText = consumer.fullName;
-            document.getElementById('dash-purok').innerText = consumer.purokAddress;
+            document.getElementById('dash-purok').innerText = consumer.purokAddress || "Brgy. Consorcia";
             document.getElementById('dash-acct-code').innerText = consumer.accountNo;
             document.getElementById('dash-prev').innerText = consumer.prevReading;
             document.getElementById('dash-curr').innerText = consumer.currReading;
@@ -255,21 +255,21 @@
                     tableBody.innerHTML += `
                         <tr>
                             <td class="p-2.5 font-medium text-white">${bill.billingMonth}</td>
-                            <td class="p-2.5 text-slate-400">${bill.paymentDate || 'Pending'}</td>
-                            <td class="p-2.5 text-slate-300">${bill.arrears || 0}</td>
+                            <td class="p-2.5 text-slate-400">${bill.paymentDate || bill.status}</td>
+                            <td class="p-2.5 text-slate-300">${bill.arrears}</td>
                             <td class="p-2.5 font-bold text-white">${bill.amountDue}</td>
-                            <td class="p-2.5 text-emerald-400">${bill.amountPaid || 0}</td>
+                            <td class="p-2.5 text-emerald-400">${bill.amountPaid}</td>
                             <td class="p-2.5 font-bold text-white">${bill.balanceDue}</td>
                             <td class="p-2.5 text-center">
                                 <button onclick='openReceipt(${JSON.stringify(bill)}, "${consumer.accountNo}", "${consumer.fullName}")' class="bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 p-1.5 rounded-lg transition" title="View Receipt">
-                                    <svg class="w-4 h-4 mx-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1,1 0 01.707.293l5.414 5.414a1,1 0 01.293.707V19a2,2 0 01-2 2z"/></svg>
+                                    <svg class="w-4 h-4 mx-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                 </button>
                             </td>
                         </tr>
                     `;
                 });
             } else {
-                tableBody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-500">No billing records found.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-500">No billing records found in Readings_Bills.</td></tr>`;
             }
         }
 
@@ -283,7 +283,7 @@
         function openReceipt(bill, acctCode, fullName) {
             document.getElementById('rec-bill-id').innerText = bill.billId || '---';
             document.getElementById('rec-month').innerText = bill.billingMonth || '---';
-            document.getElementById('rec-date').innerText = bill.paymentDate || '---';
+            document.getElementById('rec-date').innerText = bill.paymentDate || bill.readingDate || '---';
             document.getElementById('rec-acct').innerText = acctCode;
             document.getElementById('rec-name').innerText = fullName;
             document.getElementById('rec-prev').innerText = bill.prev || 0;
