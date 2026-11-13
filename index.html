@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dalcon Waterworks - Consumer Portal</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-slate-900 flex items-center justify-center min-h-screen p-0 sm:p-4">
+
+    <!-- 9:16 Portrait Container -->
+    <div class="w-full sm:max-w-[420px] h-screen sm:h-[844px] bg-slate-950 text-slate-100 flex flex-col relative sm:rounded-[40px] sm:border-[8px] sm:border-slate-800 shadow-2xl overflow-hidden">
+        
+        <!-- Mobile Status Bar Notch -->
+        <div class="w-full bg-slate-950 px-6 py-3 flex justify-between items-center text-xs font-semibold text-slate-400 z-50 select-none">
+            <span>9:31 PM</span>
+            <div class="w-24 h-4 bg-slate-900 rounded-full mx-auto absolute left-1/2 -translate-x-1/2 top-2"></div>
+            <div class="flex items-center space-x-1">
+                <span>5G</span>
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19h15.3l-.62-1.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9zm0 2c3.87 0 7 3.13 7 7s-3.13 7-7 7-7-3.13-7-7 3.13-7 7-7zm-1 3v5h2V8h-2zm0 7v2h2v-2h-2z"/></svg>
+            </div>
+        </div>
+
+        <!-- APP CONTAINER -->
+        <div id="app" class="flex-1 overflow-y-auto no-scrollbar flex flex-col relative">
+            
+            <!-- VIEW 1: LOGIN PAGE -->
+            <div id="login-view" class="flex-1 flex flex-col justify-between p-6 bg-gradient-to-b from-cyan-950 via-slate-950 to-slate-950">
+                <div class="pt-8 text-center">
+                    <div class="w-20 h-20 bg-cyan-600/20 border border-cyan-500/30 rounded-3xl mx-auto flex items-center justify-center mb-4 text-cyan-400 shadow-lg shadow-cyan-900/50">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                    </div>
+                    <h1 class="text-2xl font-bold tracking-tight text-white">Dalcon Waterworks</h1>
+                    <p class="text-xs text-cyan-400 mt-1">Brgy. Consorcia, Las Nieves, Agusan del Norte</p>
+                </div>
+
+                <div class="bg-slate-900/85 backdrop-blur border border-slate-800 p-5 rounded-3xl space-y-4 shadow-xl">
+                    <h2 class="text-sm font-semibold text-slate-200 uppercase tracking-wider">Consumer Portal Login</h2>
+                    
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Login Username (Full Name)</label>
+                            <input type="text" id="login-name" placeholder="e.g. GONZALEZ MICHAEL" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white uppercase focus:outline-none focus:border-cyan-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Password (Account Code)</label>
+                            <input type="password" id="login-pwd" placeholder="e.g. ACC-001 or GONZALEZ1001" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500 transition">
+                        </div>
+                    </div>
+
+                    <div id="login-error" class="text-xs text-rose-400 hidden">Invalid Full Name or Account Code. Please try again.</div>
+
+                    <button onclick="handleLogin()" id="login-btn" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3.5 rounded-xl transition shadow-lg shadow-cyan-500/20 text-sm">
+                        Access My Account
+                    </button>
+                </div>
+
+                <div class="text-center text-[10px] text-slate-400 pb-4">
+                    Live Sync with XDP Water Works Google Sheet
+                </div>
+            </div>
+
+            <!-- VIEW 2: CONSUMER DASHBOARD -->
+            <div id="dashboard-view" class="flex-1 flex flex-col hidden bg-slate-950">
+                <div class="p-4 bg-slate-900 border-b border-slate-800 flex justify-between items-center">
+                    <div>
+                        <span class="text-[10px] uppercase tracking-wider text-slate-400 block font-semibold">Full_Name</span>
+                        <h2 id="dash-name" class="text-base font-extrabold text-white">---</h2>
+                        <p id="dash-purok" class="text-xs text-cyan-400">---</p>
+                    </div>
+                    <button onclick="handleLogout()" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2 rounded-xl text-slate-400 hover:text-white transition text-xs flex items-center space-x-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                        <span>Logout</span>
+                    </button>
+                </div>
+
+                <div class="p-4 space-y-4 flex-1">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-slate-900/80 border border-slate-800/80 p-3.5 rounded-2xl">
+                            <span class="text-[11px] font-medium text-slate-400 block">Prev_Reading</span>
+                            <span id="dash-prev" class="text-2xl font-bold text-white mt-1 block">0</span>
+                        </div>
+                        <div class="bg-slate-900/80 border border-slate-800/80 p-3.5 rounded-2xl">
+                            <span class="text-[11px] font-medium text-slate-400 block">Curr_Reading</span>
+                            <span id="dash-curr" class="text-2xl font-bold text-white mt-1 block">0</span>
+                        </div>
+                        <div class="bg-slate-900/80 border border-slate-800/80 p-3.5 rounded-2xl">
+                            <span class="text-[11px] font-medium text-slate-400 block">Consumption</span>
+                            <span id="dash-cons" class="text-2xl font-bold text-cyan-400 mt-1 block">0</span>
+                        </div>
+                        <div class="bg-slate-900/80 border border-slate-800/80 p-3.5 rounded-2xl">
+                            <span class="text-[11px] font-medium text-slate-400 block">Current_Charge</span>
+                            <span id="dash-charge" class="text-2xl font-bold text-emerald-400 mt-1 block">0</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex justify-between items-center">
+                        <div>
+                            <span class="text-[11px] font-medium text-slate-400 block">Balance_Due</span>
+                            <span id="dash-balance" class="text-3xl font-black text-white mt-0.5 block">0</span>
+                        </div>
+                        <span id="dash-status-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">PAID</span>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+                        <div class="bg-slate-800/50 px-3.5 py-2.5 border-b border-slate-800 flex justify-between items-center">
+                            <span class="text-xs font-bold text-slate-200">Billing History & Receipts</span>
+                            <span class="text-[10px] text-cyan-400" id="dash-acct-code">---</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-950 text-slate-400 font-semibold border-b border-slate-800 text-[10px]">
+                                    <tr>
+                                        <th class="p-2.5">Billing...</th>
+                                        <th class="p-2.5">Payment_Date</th>
+                                        <th class="p-2.5">Arrears</th>
+                                        <th class="p-2.5">Amount_Due</th>
+                                        <th class="p-2.5">Amount_Paid</th>
+                                        <th class="p-2.5">Balance_Due</th>
+                                        <th class="p-2.5 text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="billing-table-body" class="divide-y divide-slate-800/60 text-slate-300">
+                                    <!-- Populated via Google Sheet live API -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 57mm Thermal Receipt Modal -->
+        <div id="receipt-modal" class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+            <div class="bg-white text-slate-900 w-full max-w-[320px] p-5 rounded-2xl shadow-2xl relative font-mono text-xs">
+                <button onclick="closeReceipt()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-700 font-sans font-bold text-sm">✕</button>
+                
+                <div class="text-center pb-3 border-b border-dashed border-slate-300">
+                    <h3 class="font-bold text-sm">DALCON WATERWORKS</h3>
+                    <p class="text-[10px] text-slate-500">Brgy. Consorcia, Las Nieves</p>
+                    <p class="text-[10px] font-bold mt-1 text-cyan-700">OFFICIAL STATEMENT OF ACCOUNT</p>
+                </div>
+
+                <div class="py-3 space-y-1.5 border-b border-dashed border-slate-300 text-[11px]">
+                    <div class="flex justify-between"><span>Bill ID:</span> <span id="rec-bill-id" class="font-bold">---</span></div>
+                    <div class="flex justify-between"><span>Billing_Month:</span> <span id="rec-month">---</span></div>
+                    <div class="flex justify-between"><span>Payment_Date:</span> <span id="rec-date">---</span></div>
+                    <div class="flex justify-between"><span>Acct Code:</span> <span id="rec-acct" class="font-bold">---</span></div>
+                    <div class="flex justify-between"><span>Full_Name:</span> <span id="rec-name" class="font-bold truncate max-w-[150px]">---</span></div>
+                </div>
+
+                <div class="py-3 space-y-1.5 border-b border-dashed border-slate-300 text-[11px]">
+                    <div class="flex justify-between"><span>Prev_Reading:</span> <span id="rec-prev">0</span></div>
+                    <div class="flex justify-between"><span>Curr_Reading:</span> <span id="rec-curr">0</span></div>
+                    <div class="flex justify-between font-bold"><span>Consumption:</span> <span id="rec-cons">0 cu.m.</span></div>
+                </div>
+
+                <div class="py-3 space-y-1.5 border-b border-dashed border-slate-300 text-[11px]">
+                    <div class="flex justify-between"><span>Current_Charge:</span> <span id="rec-charge">0</span></div>
+                    <div class="flex justify-between"><span>Arrears:</span> <span id="rec-arrears">0</span></div>
+                    <div class="flex justify-between font-bold text-sm pt-1"><span>Amount_Due:</span> <span id="rec-total">0</span></div>
+                </div>
+
+                <div class="py-3 space-y-1.5 border-b border-dashed border-slate-300 text-[11px]">
+                    <div class="flex justify-between"><span>Amount_Paid:</span> <span id="rec-paid">0</span></div>
+                    <div class="flex justify-between font-bold"><span>Balance_Due:</span> <span id="rec-bal">0</span></div>
+                    <div class="flex justify-between"><span>OR Number:</span> <span id="rec-or" class="font-bold">---</span></div>
+                </div>
+
+                <div class="pt-3 text-center">
+                    <img id="rec-qr" src="" alt="QR Verification" class="w-20 h-20 mx-auto mb-1 border border-slate-200 p-1">
+                    <p class="text-[9px] text-slate-500">Scan QR to verify bill online</p>
+                    <p class="text-[10px] font-bold mt-1">THANK YOU!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full bg-slate-950 py-2 flex justify-center items-center">
+            <div class="w-32 h-1 bg-slate-700 rounded-full"></div>
+        </div>
+
+    </div>
+
+    <script>
+        // Connected to Google Apps Script Web App
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxEZf4VwdSROB3ndwQAjWgViDkh6BC7VmSyGVLLYvzTtNViiTPmSiFAJE1_GHUo6MAJNw/exec";
+
+        async function handleLogin() {
+            const inputName = document.getElementById('login-name').value.trim().toUpperCase();
+            const inputPwd = document.getElementById('login-pwd').value.trim();
+            const errorEl = document.getElementById('login-error');
+            const loginBtn = document.getElementById('login-btn');
+
+            if (!inputName || !inputPwd) {
+                errorEl.innerText = "Please enter both Full Name and Account Code.";
+                errorEl.classList.remove('hidden');
+                return;
+            }
+
+            loginBtn.innerText = "Connecting to Google Sheet...";
+
+            try {
+                const response = await fetch(`${GOOGLE_SCRIPT_URL}?name=${encodeURIComponent(inputName)}&code=${encodeURIComponent(inputPwd)}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    errorEl.classList.add('hidden');
+                    loadDashboard(result.consumer, result.bills);
+                } else {
+                    errorEl.innerText = "Invalid Full Name or Account Code / Password.";
+                    errorEl.classList.remove('hidden');
+                }
+            } catch (err) {
+                console.error(err);
+                errorEl.innerText = "Error connecting to Google Sheet. Please check your network or Web App deployment.";
+                errorEl.classList.remove('hidden');
+            } finally {
+                loginBtn.innerText = "Access My Account";
+            }
+        }
+
+        function loadDashboard(consumer, bills) {
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('dashboard-view').classList.remove('hidden');
+
+            document.getElementById('dash-name').innerText = consumer.fullName;
+            document.getElementById('dash-purok').innerText = consumer.purokAddress;
+            document.getElementById('dash-acct-code').innerText = consumer.accountNo;
+            document.getElementById('dash-prev').innerText = consumer.prevReading;
+            document.getElementById('dash-curr').innerText = consumer.currReading;
+            document.getElementById('dash-cons').innerText = consumer.consumption;
+            document.getElementById('dash-charge').innerText = consumer.currentCharge;
+            document.getElementById('dash-balance').innerText = consumer.balanceDue;
+
+            const statusBadge = document.getElementById('dash-status-badge');
+            if (consumer.balanceDue > 0) {
+                statusBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30";
+                statusBadge.innerText = "UNPAID";
+            } else {
+                statusBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+                statusBadge.innerText = "PAID";
+            }
+
+            const tableBody = document.getElementById('billing-table-body');
+            tableBody.innerHTML = '';
+            
+            if (bills && bills.length > 0) {
+                bills.forEach(bill => {
+                    tableBody.innerHTML += `
+                        <tr>
+                            <td class="p-2.5 font-medium text-white">${bill.billingMonth}</td>
+                            <td class="p-2.5 text-slate-400">${bill.paymentDate || 'Pending'}</td>
+                            <td class="p-2.5 text-slate-300">${bill.arrears || 0}</td>
+                            <td class="p-2.5 font-bold text-white">${bill.amountDue}</td>
+                            <td class="p-2.5 text-emerald-400">${bill.amountPaid || 0}</td>
+                            <td class="p-2.5 font-bold text-white">${bill.balanceDue}</td>
+                            <td class="p-2.5 text-center">
+                                <button onclick='openReceipt(${JSON.stringify(bill)}, "${consumer.accountNo}", "${consumer.fullName}")' class="bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 p-1.5 rounded-lg transition" title="View Receipt">
+                                    <svg class="w-4 h-4 mx-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } else {
+                tableBody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-500">No billing records found.</td></tr>`;
+            }
+        }
+
+        function handleLogout() {
+            document.getElementById('dashboard-view').classList.add('hidden');
+            document.getElementById('login-view').classList.remove('hidden');
+            document.getElementById('login-name').value = '';
+            document.getElementById('login-pwd').value = '';
+        }
+
+        function openReceipt(bill, acctCode, fullName) {
+            document.getElementById('rec-bill-id').innerText = bill.billId || '---';
+            document.getElementById('rec-month').innerText = bill.billingMonth || '---';
+            document.getElementById('rec-date').innerText = bill.paymentDate || '---';
+            document.getElementById('rec-acct').innerText = acctCode;
+            document.getElementById('rec-name').innerText = fullName;
+            document.getElementById('rec-prev').innerText = bill.prev || 0;
+            document.getElementById('rec-curr').innerText = bill.curr || 0;
+            document.getElementById('rec-cons').innerText = `${bill.cons || 0} cu.m.`;
+            document.getElementById('rec-charge').innerText = bill.charge || 0;
+            document.getElementById('rec-arrears').innerText = bill.arrears || 0;
+            document.getElementById('rec-total').innerText = bill.amountDue || 0;
+            document.getElementById('rec-paid').innerText = bill.amountPaid || 0;
+            document.getElementById('rec-bal').innerText = bill.balanceDue || 0;
+            document.getElementById('rec-or').innerText = bill.orNo || '---';
+
+            const qrData = encodeURIComponent(`DALCON-${acctCode}-${bill.billId || '001'}`);
+            document.getElementById('rec-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrData}`;
+
+            document.getElementById('receipt-modal').classList.remove('hidden');
+        }
+
+        function closeReceipt() {
+            document.getElementById('receipt-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
