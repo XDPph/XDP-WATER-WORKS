@@ -1,356 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dalcon Waterworks - Consumer Portal</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        /* Hide scrollbars for clean mobile/portrait aesthetic */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    </style>
-</head>
-<body class="bg-slate-900 flex items-center justify-center min-h-screen p-0 sm:p-4">
-
-    <!-- 9:16 Portrait Container -->
-    <div class="w-full sm:max-w-[420px] h-screen sm:h-[844px] bg-slate-950 text-slate-100 flex flex-col relative sm:rounded-[40px] sm:border-[8px] sm:border-slate-800 shadow-2xl overflow-hidden">
-        
-        <!-- Mobile Status Bar Notch -->
-        <div class="w-full bg-slate-950 px-6 py-3 flex justify-between items-center text-xs font-semibold text-slate-400 z-50 select-none">
-            <span>8:28 PM</span>
-            <div class="w-24 h-4 bg-slate-900 rounded-full mx-auto absolute left-1/2 -translate-x-1/2 top-2"></div>
-            <div class="flex items-center space-x-1">
-                <span>5G</span>
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19h15.3l-.62-1.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9zm0 2c3.87 0 7 3.13 7 7s-3.13 7-7 7-7-3.13-7-7 3.13-7 7-7zm-1 3v5h2V8h-2zm0 7v2h2v-2h-2z"/></svg>
-            </div>
-        </div>
-
-        <!-- APP CONTAINER -->
-        <div id="app" class="flex-1 overflow-y-auto no-scrollbar flex flex-col relative">
-            
-            <!-- VIEW 1: LOGIN PAGE -->
-            <div id="login-view" class="flex-1 flex flex-col justify-between p-6 bg-gradient-to-b from-cyan-950 via-slate-950 to-slate-950">
-                <div class="pt-8 text-center">
-                    <div class="w-20 h-20 bg-cyan-600/20 border border-cyan-500/30 rounded-3xl mx-auto flex items-center justify-center mb-4 text-cyan-400 shadow-lg shadow-cyan-900/50">
-                        <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
-                    </div>
-                    <h1 class="text-2xl font-bold tracking-tight text-white">Dalcon Waterworks</h1>
-                    <p class="text-xs text-cyan-400 mt-1">Brgy. Consorcia, Las Nieves, Agusan del Norte</p>
-                </div>
-
-                <div class="bg-slate-900/80 backdrop-blur border border-slate-800 p-5 rounded-3xl space-y-4 shadow-xl">
-                    <h2 class="text-sm font-semibold text-slate-200 uppercase tracking-wider">Consumer Portal Login</h2>
-                    
-                    <div class="space-y-3">
-                        <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Account Number</label>
-                            <input type="text" id="login-acct" placeholder="e.g. ACC-001" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500 transition">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">PIN / Password</label>
-                            <input type="password" id="login-pin" placeholder="••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500 transition">
-                        </div>
-                    </div>
-
-                    <div id="login-error" class="text-xs text-rose-400 hidden">Invalid Account Number or PIN. Try demo accounts below.</div>
-
-                    <button onclick="handleLogin()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3.5 rounded-xl transition shadow-lg shadow-cyan-500/20 text-sm">
-                        Access My Account
-                    </button>
-
-                    <div class="pt-2 border-t border-slate-800/80">
-                        <p class="text-[11px] text-slate-400 mb-2 text-center">Quick Demo Login:</p>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="fillDemo('ACC-001', '1234')" class="bg-slate-800 hover:bg-slate-700 text-xs py-2 px-3 rounded-lg text-slate-300 transition text-left">
-                                <span class="font-semibold block text-cyan-400">ACC-001</span>
-                                <span class="text-[10px] text-slate-400">Michael Gonzalez</span>
-                            </button>
-                            <button onclick="fillDemo('ACC-004', '1234')" class="bg-slate-800 hover:bg-slate-700 text-xs py-2 px-3 rounded-lg text-slate-300 transition text-left">
-                                <span class="font-semibold block text-cyan-400">ACC-004</span>
-                                <span class="text-[10px] text-slate-400">Carmelita Asares</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="text-center text-[10px] text-slate-400 pb-4">
-                    Secured by Dalcon Waterworks Automated Billing System
-                </div>
-            </div>
-
-            <!-- VIEW 2: CONSUMER DASHBOARD -->
-            <div id="dashboard-view" class="flex-1 flex flex-col hidden bg-slate-950">
-                <!-- Header -->
-                <div class="p-5 bg-gradient-to-b from-cyan-950/60 to-slate-950 border-b border-slate-800 flex justify-between items-center">
-                    <div>
-                        <div class="flex items-center space-x-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span id="dash-acct-no" class="text-xs font-bold text-cyan-400 tracking-wider">ACC-001</span>
-                        </div>
-                        <h2 id="dash-name" class="text-lg font-bold text-white mt-0.5">GONZALEZ MICHAEL</h2>
-                        <p id="dash-purok" class="text-xs text-slate-400">Purok 1, Brgy. Consorcia</p>
-                    </div>
-                    <button onclick="handleLogout()" class="bg-slate-900 hover:bg-slate-800 border border-slate-800 p-2.5 rounded-xl text-slate-400 hover:text-white transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                    </button>
-                </div>
-
-                <!-- Dashboard Content -->
-                <div class="p-5 space-y-4 flex-1">
-                    <!-- Balance Summary Card -->
-                    <div id="balance-card" class="p-5 rounded-3xl border transition shadow-lg">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p id="balance-title" class="text-xs font-semibold uppercase tracking-wider">Total Balance Due</p>
-                                <h3 id="dash-balance" class="text-3xl font-extrabold mt-1">₱0.00</h3>
-                            </div>
-                            <span id="dash-status-badge" class="px-3 py-1 rounded-full text-xs font-bold">PAID</span>
-                        </div>
-                        <div class="mt-4 pt-4 border-t border-white/10 grid grid-cols-2 gap-4 text-xs">
-                            <div>
-                                <span class="text-slate-400 block">Current Bill</span>
-                                <span id="dash-current-charge" class="font-bold text-white text-sm">₱10.00</span>
-                            </div>
-                            <div>
-                                <span class="text-slate-400 block">Previous Arrears</span>
-                                <span id="dash-arrears" class="font-bold text-white text-sm">₱0.00</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Meter & Consumption KPI -->
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
-                            <span class="text-xs text-slate-400 block">Meter Reading</span>
-                            <span id="dash-meter-reading" class="text-lg font-bold text-white mt-1 block">15 cu.m.</span>
-                            <span class="text-[10px] text-cyan-400 mt-0.5 block">MTR-1001 (Active)</span>
-                        </div>
-                        <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
-                            <span class="text-xs text-slate-400 block">Tariff Rate</span>
-                            <span class="text-lg font-bold text-white mt-1 block">RATE-01</span>
-                            <span class="text-[10px] text-emerald-400 mt-0.5 block">₱10 / cu.m. tier</span>
-                        </div>
-                    </div>
-
-                    <!-- Billing History & Receipts -->
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <h4 class="text-sm font-bold text-slate-200">Billing History & Receipts</h4>
-                            <span class="text-xs text-slate-400">Nov 2026 Cycle</span>
-                        </div>
-
-                        <div id="billing-history-list" class="space-y-2">
-                            <!-- Populated via JS -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- 57mm Thermal Receipt Modal -->
-        <div id="receipt-modal" class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-            <div class="bg-white text-slate-900 w-full max-w-[320px] p-6 rounded-2xl shadow-2xl relative font-mono text-xs">
-                <button onclick="closeReceipt()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-700 font-sans font-bold text-sm">✕</button>
-                
-                <div class="text-center pb-3 border-b border-dashed border-slate-300">
-                    <h3 class="font-bold text-sm">DALCON WATERWORKS</h3>
-                    <p class="text-[10px] text-slate-500">Brgy. Consorcia, Las Nieves</p>
-                    <p class="text-[10px] font-bold mt-1 text-cyan-700">OFFICIAL STATEMENT OF ACCOUNT</p>
-                </div>
-
-                <div class="py-3 space-y-1.5 border-b border-dashed border-slate-300 text-[11px]">
-                    <div class="flex justify-between"><span>Bill ID:</span> <span id="rec-bill-id" class="font-bold">0009c917</span></div>
-                    <div class="flex justify-between"><span>Month:</span> <span id="rec-month">Nov 2026</span></div>
-                    <div class="flex justify-between"><span>Date:</span> <span id="rec-date">11/13/2026</span></div>
-                    <div class="flex justify-between"><span>Acct No:</span> <span id="rec-acct" class="font-bold">ACC-001</span></div>
-                    <div class="flex justify-between"><span>Name:</span> <span id="rec-name" class="font-bold truncate max-w-[160px]">GONZALEZ MICHAEL</span></div>
-                </div>
-
-                <div class="py-3 space-y-1.5 border-b border-dashed border-slate-300 text-[11px]">
-                    <div class="flex justify-between"><span>Prev Reading:</span> <span id="rec-prev">5</span></div>
-                    <div class="flex justify-between"><span>Curr Reading:</span> <span id="rec-curr">15</span></div>
-                    <div class="flex justify-between font-bold"><span>Consumption:</span> <span id="rec-cons">10 cu.m.</span></div>
-                </div>
-
-                <div class="py-3 space-y-1.5 border-b border-dashed border-slate-300 text-[11px]">
-                    <div class="flex justify-between"><span>Current Charge:</span> <span id="rec-charge">₱10.00</span></div>
-                    <div class="flex justify-between"><span>Arrears:</span> <span id="rec-arrears">₱0.00</span></div>
-                    <div class="flex justify-between font-bold text-sm pt-1"><span>TOTAL DUE:</span> <span id="rec-total">₱10.00</span></div>
-                </div>
-
-                <div class="py-3 space-y-1.5 border-b border-dashed border-slate-300 text-[11px]">
-                    <div class="flex justify-between"><span>Status:</span> <span id="rec-status" class="font-bold text-emerald-600">PAID</span></div>
-                    <div class="flex justify-between"><span>Amount Paid:</span> <span id="rec-paid">₱10.00</span></div>
-                    <div class="flex justify-between"><span>Balance Due:</span> <span id="rec-bal" class="font-bold">₱0.00</span></div>
-                    <div class="flex justify-between"><span>OR Number:</span> <span id="rec-or" class="font-bold">DLCN-0001</span></div>
-                </div>
-
-                <div class="pt-4 text-center">
-                    <img id="rec-qr" src="" alt="QR Verification" class="w-24 h-24 mx-auto mb-2 border border-slate-200 p-1">
-                    <p class="text-[9px] text-slate-500">Scan QR to verify bill online</p>
-                    <p class="text-[10px] font-bold mt-2">THANK YOU!</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Navigation Bar Indicator -->
-        <div class="w-full bg-slate-950 py-2 flex justify-center items-center">
-            <div class="w-32 h-1 bg-slate-700 rounded-full"></div>
-        </div>
-
-    </div>
-
-    <script>
-        // Database of accounts matching user's XDP WATER WORKS sheet
-        const accountsData = {
-            "ACC-001": {
-                name: "GONZALEZ MICHAEL",
-                purok: "Purok 1, Brgy. Consorcia",
-                meterNo: "MTR-1001",
-                balance: 0.00,
-                status: "PAID",
-                currentCharge: 10.00,
-                arrears: 0.00,
-                meterReading: "15 cu.m.",
-                bills: [
-                    { billId: "0009c917", month: "Nov 2026", date: "11/13/2026", prev: 5, curr: 15, cons: 10, charge: 10.00, arrears: 0.00, total: 10.00, status: "PAID", paid: 10.00, balance: 0.00, orNo: "DLCN-0001" }
-                ]
-            },
-            "ACC-004": {
-                name: "ASARES CARMELITA",
-                purok: "Purok 1, Brgy. Consorcia",
-                meterNo: "MTR-1004",
-                balance: 0.00,
-                status: "PAID",
-                currentCharge: 120.00,
-                arrears: 0.00,
-                meterReading: "26 cu.m.",
-                bills: [
-                    { billId: "16c19940", month: "Nov 2026", date: "11/13/2026", prev: 5, curr: 26, cons: 21, charge: 120.00, arrears: 0.00, total: 120.00, status: "PAID", paid: 120.00, balance: 0.00, orNo: "DLCN-0005" }
-                ]
-            },
-            "ACC-006": {
-                name: "LASCO JOJO",
-                purok: "Purok 1, Brgy. Consorcia",
-                meterNo: "MTR-1006",
-                balance: 0.00,
-                status: "PAID",
-                currentCharge: 110.00,
-                arrears: 0.00,
-                meterReading: "25 cu.m.",
-                bills: [
-                    { billId: "26190ec5", month: "Nov 2026", date: "11/13/2026", prev: 5, curr: 25, cons: 20, charge: 110.00, arrears: 0.00, total: 110.00, status: "PAID", paid: 110.00, balance: 0.00, orNo: "DLCN-0002" }
-                ]
-            }
-        };
-
-        function fillDemo(acct, pin) {
-            document.getElementById('login-acct').value = acct;
-            document.getElementById('login-pin').value = pin;
-            handleLogin();
-        }
-
-        function handleLogin() {
-            const acctNo = document.getElementById('login-acct').value.trim().toUpperCase();
-            const pin = document.getElementById('login-pin').value.trim();
-            const errorEl = document.getElementById('login-error');
-
-            if (accountsData[acctNo]) {
-                errorEl.classList.add('hidden');
-                loadDashboard(acctNo, accountsData[acctNo]);
-            } else {
-                errorEl.classList.remove('hidden');
-            }
-        }
-
-        function loadDashboard(acctNo, data) {
-            document.getElementById('login-view').classList.add('hidden');
-            document.getElementById('dashboard-view').classList.remove('hidden');
-
-            document.getElementById('dash-acct-no').innerText = acctNo;
-            document.getElementById('dash-name').innerText = data.name;
-            document.getElementById('dash-purok').innerText = data.purok;
-            document.getElementById('dash-balance').innerText = `₱${data.balance.toFixed(2)}`;
-            document.getElementById('dash-current-charge').innerText = `₱${data.currentCharge.toFixed(2)}`;
-            document.getElementById('dash-arrears').innerText = `₱${data.arrears.toFixed(2)}`;
-            document.getElementById('dash-meter-reading').innerText = data.meterReading;
-
-            const balanceCard = document.getElementById('balance-card');
-            const balanceTitle = document.getElementById('balance-title');
-            const statusBadge = document.getElementById('dash-status-badge');
-
-            if (data.balance > 0) {
-                balanceCard.className = "p-5 rounded-3xl border bg-rose-950/40 border-rose-800/80 shadow-lg";
-                balanceTitle.className = "text-xs font-semibold uppercase tracking-wider text-rose-400";
-                statusBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30";
-                statusBadge.innerText = "UNPAID";
-            } else {
-                balanceCard.className = "p-5 rounded-3xl border bg-emerald-950/40 border-emerald-800/80 shadow-lg";
-                balanceTitle.className = "text-xs font-semibold uppercase tracking-wider text-emerald-400";
-                statusBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
-                statusBadge.innerText = "PAID";
-            }
-
-            const historyList = document.getElementById('billing-history-list');
-            historyList.innerHTML = '';
-            data.bills.forEach(bill => {
-                historyList.innerHTML += `
-                    <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-2xl flex items-center justify-between">
-                        <div>
-                            <span class="text-xs font-bold text-white block">${bill.month}</span>
-                            <span class="text-[10px] text-slate-400">Consumption: ${bill.cons} cu.m. • OR: ${bill.orNo}</span>
-                        </div>
-                        <div class="text-right flex items-center space-x-3">
-                            <div>
-                                <span class="text-xs font-bold text-emerald-400 block">₱${bill.total.toFixed(2)}</span>
-                                <span class="text-[10px] text-slate-400">${bill.status}</span>
-                            </div>
-                            <button onclick='openReceipt(${JSON.stringify(bill)}, "${acctNo}", "${data.name}")' class="bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 p-2 rounded-xl transition">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function handleLogout() {
-            document.getElementById('dashboard-view').classList.add('hidden');
-            document.getElementById('login-view').classList.remove('hidden');
-            document.getElementById('login-acct').value = '';
-            document.getElementById('login-pin').value = '';
-        }
-
-        function openReceipt(bill, acctNo, name) {
-            document.getElementById('rec-bill-id').innerText = bill.billId;
-            document.getElementById('rec-month').innerText = bill.month;
-            document.getElementById('rec-date').innerText = bill.date;
-            document.getElementById('rec-acct').innerText = acctNo;
-            document.getElementById('rec-name').innerText = name;
-            document.getElementById('rec-prev').innerText = bill.prev;
-            document.getElementById('rec-curr').innerText = bill.curr;
-            document.getElementById('rec-cons').innerText = `${bill.cons} cu.m.`;
-            document.getElementById('rec-charge').innerText = `₱${bill.charge.toFixed(2)}`;
-            document.getElementById('rec-arrears').innerText = `₱${bill.arrears.toFixed(2)}`;
-            document.getElementById('rec-total').innerText = `₱${bill.total.toFixed(2)}`;
-            document.getElementById('rec-status').innerText = bill.status;
-            document.getElementById('rec-paid').innerText = `₱${bill.paid.toFixed(2)}`;
-            document.getElementById('rec-bal').innerText = `₱${bill.balance.toFixed(2)}`;
-            document.getElementById('rec-or').innerText = bill.orNo;
-
-            const qrData = encodeURIComponent(`DALCON-${acctNo}-${bill.billId}`);
-            document.getElementById('rec-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrData}`;
-
-            document.getElementById('receipt-modal').classList.remove('hidden');
-        }
-
-        function closeReceipt() {
-            document.getElementById('receipt-modal').classList.add('hidden');
-        }
-    </script>
-</body>
-</html>
+function doGet(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet();
+  var consumersSheet = sheet.getSheetByName("Consumers");
+  var billsSheet = sheet.getSheetByName("Readings_Bills");
+  
+  var name = (e.parameter.name || "").trim().toUpperCase();
+  var code = (e.parameter.code || "").trim();
+  
+  var consumersData = consumersSheet.getDataRange().getValues();
+  var matchedConsumer = null;
+  
+  // Find consumer by Full Name and Account Code
+  for (var i = 1; i < consumersData.length; i++) {
+    var row = consumersData[i];
+    var acctNo = String(row[0]).trim(); // Account_No
+    var fullName = String(row[1]).trim().toUpperCase(); // Full_Name
+    
+    if (fullName === name && (acctNo === code || (fullName.split(" ")[0] + acctNo) === code)) {
+      matchedConsumer = {
+        accountNo: acctNo,
+        fullName: fullName,
+        purokAddress: row[2],
+        meterNo: row[3],
+        prevReading: row[4] || 0,
+        currReading: row[5] || 0,
+        consumption: (row[5] || 0) - (row[4] || 0),
+        currentCharge: row[6] || 0,
+        balanceDue: row[7] || 0
+      };
+      break;
+    }
+  }
+  
+  if (!matchedConsumer) {
+    return ContentService.createTextOutput(JSON.stringify({ success: false }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+  
+  // Find matching bills
+  var billsData = billsSheet.getDataRange().getValues();
+  var matchedBills = [];
+  
+  for (var j = 1; j < billsData.length; j++) {
+    var bRow = billsData[j];
+    if (String(bRow[2]).trim() === matchedConsumer.accountNo) {
+      matchedBills.push({
+        billId: bRow[0],
+        billingMonth: bRow[1],
+        paymentDate: bRow[4],
+        prev: bRow[5],
+        curr: bRow[6],
+        cons: bRow[7],
+        charge: bRow[8],
+        arrears: bRow[9],
+        amountDue: bRow[10],
+        status: bRow[11],
+        amountPaid: bRow[12],
+        balanceDue: bRow[13],
+        orNo: bRow[14]
+      });
+    }
+  }
+  
+  var output = {
+    success: true,
+    consumer: matchedConsumer,
+    bills: matchedBills
+  };
+  
+  return ContentService.createTextOutput(JSON.stringify(output))
+    .setMimeType(ContentService.MimeType.JSON);
+}
