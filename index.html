@@ -43,7 +43,7 @@
         }
 
         .container {
-            max-width: 1300px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 24px;
         }
@@ -112,7 +112,7 @@
             padding: 40px;
             border-radius: 16px;
             width: 100%;
-            max-width: 440px;
+            max-width: 460px;
             box-shadow: 0 0 40px rgba(0, 240, 255, 0.2);
             position: relative;
             overflow: hidden;
@@ -139,7 +139,7 @@
         .login-card p {
             color: var(--text-muted);
             font-size: 0.9rem;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
         }
 
         .form-group {
@@ -171,6 +171,23 @@
         .form-control:focus {
             border-color: var(--neon-cyan);
             box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+        }
+
+        .config-box {
+            margin-bottom: 20px;
+            background: rgba(0, 240, 255, 0.03);
+            border: 1px dashed rgba(0, 240, 255, 0.3);
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .config-box label {
+            font-size: 0.7rem;
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 5px;
         }
 
         .btn-cyber {
@@ -361,7 +378,7 @@
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             white-space: nowrap;
         }
 
@@ -369,7 +386,7 @@
             background: rgba(0, 240, 255, 0.05);
             color: var(--neon-cyan);
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             letter-spacing: 1px;
             text-transform: uppercase;
             padding: 14px 12px;
@@ -405,6 +422,23 @@
             background: rgba(255, 71, 87, 0.15);
             color: #ff4757;
             border: 1px solid rgba(255, 71, 87, 0.3);
+        }
+
+        .btn-receipt {
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-receipt:hover {
+            background: var(--neon-cyan);
+            color: #050b14;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
         }
 
         /* Loading & Messages */
@@ -492,17 +526,23 @@
         <div id="login-screen">
             <div class="login-card">
                 <h2>Consumer Authentication</h2>
-                <p>Enter your username and password as registered in the database to access your billing account.</p>
+                <p>Enter your Account Number and Password (PASSEND) to securely access your billing telemetry.</p>
+                
+                <div class="config-box">
+                    <label for="scriptUrlInput">Google Apps Script Web App URL</label>
+                    <input type="text" id="scriptUrlInput" class="form-control" style="font-size:0.8rem; padding:8px;" placeholder="https://script.google.com/macros/s/.../exec">
+                </div>
+
                 <form id="login-form" onsubmit="handleLogin(event)">
                     <div class="form-group">
-                        <label for="usernameInput">Username</label>
-                        <input type="text" id="usernameInput" class="form-control" placeholder="Enter username" required autocomplete="username">
+                        <label for="accountNoInput">Account No (Column A)</label>
+                        <input type="text" id="accountNoInput" class="form-control" placeholder="e.g. 123456" required autocomplete="username" value="123456">
                     </div>
                     <div class="form-group">
-                        <label for="passwordInput">Password</label>
-                        <input type="password" id="passwordInput" class="form-control" placeholder="Enter password" required autocomplete="current-password">
+                        <label for="passwordInput">Password (Column G / PASSEND)</label>
+                        <input type="password" id="passwordInput" class="form-control" placeholder="Enter password" required autocomplete="current-password" value="pass123">
                     </div>
-                    <div class="error-msg" id="loginError">Invalid username or password.</div>
+                    <div class="error-msg" id="loginError">Invalid account number or password.</div>
                     <button type="submit" class="btn-cyber">Access Account</button>
                 </form>
             </div>
@@ -513,7 +553,7 @@
             <div class="user-status-bar">
                 <div class="user-info">
                     <h3 id="dashUserName">--</h3>
-                    <span>ACTIVE CONSUMER SESSION</span>
+                    <span id="dashAccountNo">ACCOUNT NO: --</span>
                 </div>
                 <button class="btn-logout" onclick="handleLogout()">Terminate Session</button>
             </div>
@@ -551,25 +591,30 @@
             <!-- Billing History Matrix -->
             <div class="matrix-section">
                 <div class="matrix-header">
-                    <div class="matrix-title">Historical Billing Matrix</div>
+                    <div class="matrix-title">Historical Billing Matrix (Readings_Bills)</div>
                     <div style="font-size: 0.8rem; color: var(--text-muted);" id="rowCountInfo">0 Records Found</div>
                 </div>
                 <div class="table-container">
                     <table>
                         <thead>
                             <tr>
+                                <th>Bill ID</th>
                                 <th>Month</th>
+                                <th>Account No</th>
+                                <th>Full Name</th>
+                                <th>Reading Date</th>
                                 <th>Previous</th>
                                 <th>Current</th>
                                 <th>Consumed</th>
-                                <th>Sub-Total</th>
+                                <th>Current Charge</th>
                                 <th>Arrears</th>
-                                <th>Total</th>
+                                <th>Amount Due</th>
                                 <th>Status</th>
-                                <th>Paid Amount</th>
-                                <th>Balance</th>
-                                <th>Receipt</th>
-                                <th>Date</th>
+                                <th>Amount Paid</th>
+                                <th>Balance Due</th>
+                                <th>OR Number</th>
+                                <th>Payment Date</th>
+                                <th>Receipt PDF</th>
                             </tr>
                         </thead>
                         <tbody id="billingTableBody">
@@ -582,9 +627,7 @@
     </div>
 
     <script>
-        // REPLACE WITH YOUR DEPLOYED GOOGLE APPS SCRIPT WEB APP URL
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhBoubUp-focVbp_WCuAObSjZNG6k2__rcP-ogd2yEr0KshD2DA-ydH4Pp45MV7ppAIg/exec";
-
+        // Default Google Apps Script Web App URL or user custom input
         let currentConsumerRecords = [];
 
         function showLoader(text = "PROCESSING REQUEST...") {
@@ -598,62 +641,90 @@
 
         async function handleLogin(e) {
             e.preventDefault();
-            const username = document.getElementById("usernameInput").value.trim();
+            const accountNo = document.getElementById("accountNoInput").value.trim();
             const password = document.getElementById("passwordInput").value.trim();
+            const scriptUrl = document.getElementById("scriptUrlInput").value.trim();
             const errorEl = document.getElementById("loginError");
             errorEl.style.display = "none";
 
-            if (!username || !password) return;
+            if (!accountNo || !password) return;
 
             showLoader("AUTHENTICATING CONSUMER...");
 
             try {
-                // If SCRIPT_URL is still placeholder, use demo simulation for instant preview matching B (Username) and G (Password)
-                if (SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT")) {
-                    await new Promise(r => setTimeout(r, 1000));
+                if (!scriptUrl) {
+                    // Simulation mode if URL is empty for instant testing
+                    await new Promise(r => setTimeout(r, 800));
                     currentConsumerRecords = [
                         {
-                            Billing_Month: "NOVEMBER 2026",
-                            Reading_Date: "2026-11-10",
-                            Prev_Reading: 145,
-                            Curr_Reading: 168,
-                            Consumption: 23,
-                            Current_Charge: 460.00,
+                            Bill_ID: "DCN-122026-9f8a",
+                            Billing_Month: "DECEMBER 2026",
+                            Account_No: accountNo,
+                            Full_Name: "GONZALEZ MICHAEL",
+                            Reading_Date: "2026-12-15",
+                            Prev_Reading: 67,
+                            Curr_Reading: 88,
+                            Consumption: 21,
+                            Current_Charge: 420.00,
                             Arrears: 0.00,
-                            Amount_Due: 460.00,
+                            Amount_Due: 420.00,
+                            Payment_Status: "UNPAID",
+                            Amount_Paid: 0.00,
+                            Balance_Due: 420.00,
+                            OR_Number: "",
+                            Payment_Date: "",
+                            Receipt_PDF: ""
+                        },
+                        {
+                            Bill_ID: "DCN-112026-80a4",
+                            Billing_Month: "NOVEMBER 2026",
+                            Account_No: accountNo,
+                            Full_Name: "GONZALEZ MICHAEL",
+                            Reading_Date: "2026-11-15",
+                            Prev_Reading: 50,
+                            Curr_Reading: 67,
+                            Consumption: 17,
+                            Current_Charge: 340.00,
+                            Arrears: 0.00,
+                            Amount_Due: 340.00,
                             Payment_Status: "PAID",
-                            Amount_Paid: 460.00,
+                            Amount_Paid: 340.00,
                             Balance_Due: 0.00,
-                            Payment_Date: "2026-11-11"
+                            OR_Number: "OR-98765",
+                            Payment_Date: "2026-11-16",
+                            Receipt_PDF: "https://example.com/receipt-mock.pdf"
                         }
                     ];
-                    renderDashboard(username.toUpperCase(), currentConsumerRecords);
+                    renderDashboard("GONZALEZ MICHAEL", accountNo, currentConsumerRecords);
                     hideLoader();
                     return;
                 }
 
-                const response = await fetch(`${SCRIPT_URL}?action=getConsumer&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
+                const url = `${scriptUrl}?action=getConsumer&accountNo=${encodeURIComponent(accountNo)}&password=${encodeURIComponent(password)}`;
+                const response = await fetch(url);
                 const result = await response.json();
 
                 if (result.status === "success" && result.data && result.data.length > 0) {
                     currentConsumerRecords = result.data;
-                    renderDashboard(result.fullName || username.toUpperCase(), currentConsumerRecords);
+                    renderDashboard(result.fullName || "CONSUMER", accountNo, currentConsumerRecords);
                 } else {
+                    errorEl.innerText = result.message || "Invalid account number or password.";
                     errorEl.style.display = "block";
                 }
             } catch (err) {
                 console.error(err);
-                errorEl.innerText = "Connection error. Verify Web App URL.";
+                errorEl.innerText = "Connection error or invalid Apps Script URL.";
                 errorEl.style.display = "block";
             } finally {
                 hideLoader();
             }
         }
 
-        function renderDashboard(name, records) {
+        function renderDashboard(name, accountNo, records) {
             document.getElementById("login-screen").style.display = "none";
             document.getElementById("dashboard-screen").style.display = "block";
             document.getElementById("dashUserName").innerText = name;
+            document.getElementById("dashAccountNo").innerText = `ACCOUNT NO: ${accountNo}`;
 
             const latest = records[0] || {};
             
@@ -678,7 +749,7 @@
             }
             document.getElementById("valLastPayment").innerText = `Paid Date: ${latest.Payment_Date || '--'}`;
 
-            // Render Table Matrix
+            // Render Billing Table Matrix
             const tbody = document.getElementById("billingTableBody");
             tbody.innerHTML = "";
 
@@ -687,7 +758,11 @@
                 const isPaid = String(row.Payment_Status).toUpperCase() === "PAID";
                 
                 tr.innerHTML = `
-                    <td style="font-weight: 600; color: var(--neon-cyan);">${row.Billing_Month || '--'}</td>
+                    <td style="font-family: 'Orbitron', sans-serif; font-size: 0.75rem; color: var(--neon-cyan);">${row.Bill_ID || '--'}</td>
+                    <td style="font-weight: 600;">${row.Billing_Month || '--'}</td>
+                    <td>${row.Account_No || '--'}</td>
+                    <td>${row.Full_Name || '--'}</td>
+                    <td>${row.Reading_Date || '--'}</td>
                     <td>${row.Prev_Reading || 0}</td>
                     <td>${row.Curr_Reading || 0}</td>
                     <td style="font-weight: 600;">${row.Consumption || 0} m³</td>
@@ -697,8 +772,9 @@
                     <td><span class="badge ${isPaid ? 'paid' : 'unpaid'}">${row.Payment_Status || 'UNPAID'}</span></td>
                     <td>₱${parseFloat(row.Amount_Paid || 0).toFixed(2)}</td>
                     <td style="color: ${parseFloat(row.Balance_Due || 0) > 0 ? '#ff4757' : 'var(--neon-green)'};">₱${parseFloat(row.Balance_Due || 0).toFixed(2)}</td>
-                    <td>${row.Payment_Status === 'PAID' ? 'OR-ONLINE' : '--'}</td>
+                    <td>${row.OR_Number || '--'}</td>
                     <td>${row.Payment_Date || '--'}</td>
+                    <td>${row.Receipt_PDF ? `<a href="${row.Receipt_PDF}" target="_blank" class="btn-receipt">View PDF</a>` : '--'}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -708,66 +784,88 @@
 
         function handleLogout() {
             currentConsumerRecords = [];
-            document.getElementById("usernameInput").value = "";
-            document.getElementById("passwordInput").value = "";
+            document.getElementById("accountNoInput").value = "123456";
+            document.getElementById("passwordInput").value = "pass123";
             document.getElementById("dashboard-screen").style.display = "none";
             document.getElementById("login-screen").style.display = "flex";
         }
     </script>
 
     <!-- 
-      ========================================================================
-      GOOGLE APPS SCRIPT BACKEND CODE (Paste into Extensions > Apps Script)
-      ========================================================================
-      
-      function doGet(e) {
-        var usernameInput = String(e.parameter.username || "").trim();
-        var passwordInput = String(e.parameter.password || "").trim();
+        ========================================================================
+        GOOGLE APPS SCRIPT BACKEND CODE (Paste into Extensions > Apps Script)
+        ========================================================================
         
-        var ss = SpreadsheetApp.getActiveSpreadsheet();
-        var sheet = ss.getSheetByName("CONSUMERS"); // Ensure exact tab name
-        var data = sheet.getDataRange().getValues();
-        
-        var results = [];
-        var matchedFullName = "";
-        
-        // Loop through rows starting from row 2 (index 1)
-        for (var i = 1; i < data.length; i++) {
-          var row = data[i];
-          var usernameCol = String(row[1] || "").trim(); // Column B (index 1)
-          var passwordCol = String(row[6] || "").trim(); // Column G (index 6)
-          var fullNameCol = String(row[2] || "").trim(); // Column C (index 2) - Full Name
+        function doGet(e) {
+          var accountNoInput = String(e.parameter.accountNo || "").trim();
+          var passwordInput = String(e.parameter.password || "").trim();
           
-          if (usernameCol === usernameInput && passwordCol === passwordInput) {
-            matchedFullName = fullNameCol;
-            results.push({
-              Billing_Month: row[11],    // L
-              Reading_Date: row[14],     // O
-              Prev_Reading: row[15],     // P
-              Curr_Reading: row[16],     // Q
-              Consumption: row[17],      // R
-              Current_Charge: row[18],   // S
-              Arrears: row[19],          // T
-              Amount_Due: row[20],       // U
-              Payment_Status: row[21],   // V
-              Amount_Paid: row[22],      // W
-              Balance_Due: row[23],      // X
-              Payment_Date: row[24]      // Y
-            });
+          var ss = SpreadsheetApp.getActiveSpreadsheet();
+          
+          // 1. Validate Consumer against 'Consumers' tab (Account No in Col A [index 0], PASSEND in Col G [index 6])
+          var consumersSheet = ss.getSheetByName("Consumers");
+          var consumersData = consumersSheet.getDataRange().getValues();
+          
+          var matchedFullName = "";
+          var isAuthenticated = false;
+          
+          for (var i = 1; i < consumersData.length; i++) {
+            var row = consumersData[i];
+            var accNoCol = String(row[0] || "").trim();      // Column A
+            var passCol = String(row[6] || "").trim();       // Column G (PASSEND)
+            var nameCol = String(row[2] || "").trim();       // Column C (Full Name)
+            
+            if (accNoCol === accountNoInput && passCol === passwordInput) {
+              isAuthenticated = true;
+              matchedFullName = nameCol;
+              break;
+            }
           }
-        }
-        
-        if (results.length > 0) {
+          
+          if (!isAuthenticated) {
+            return ContentService
+              .createTextOutput(JSON.stringify({ status: "error", message: "Invalid Account Number or Password." }))
+              .setMimeType(ContentService.MimeType.JSON);
+          }
+          
+          // 2. Fetch all bills for this account from 'Readings_Bills' tab
+          var billsSheet = ss.getSheetByName("Readings_Bills");
+          var billsData = billsSheet.getDataRange().getValues();
+          var headers = billsData[0]; // Header row
+          
+          var results = [];
+          for (var j = 1; j < billsData.length; j++) {
+            var bRow = billsData[j];
+            var bAccountNo = String(bRow[2] || "").trim(); // Assuming Account No is in Column C (index 2) of Readings_Bills
+            
+            if (bAccountNo === accountNoInput) {
+              results.push({
+                Bill_ID: bRow[0],          // Col A
+                Billing_Month: bRow[1],     // Col B
+                Account_No: bRow[2],        // Col C
+                Full_Name: bRow[3] || matchedFullName, // Col D
+                Reading_Date: bRow[4],      // Col E
+                Prev_Reading: bRow[5],      // Col F
+                Curr_Reading: bRow[6],      // Col G
+                Consumption: bRow[7],       // Col H
+                Current_Charge: bRow[8],    // Col S / I
+                Arrears: bRow[9],           // Col J
+                Amount_Due: bRow[10],       // Col K
+                Payment_Status: bRow[11],   // Col L
+                Amount_Paid: bRow[12],      // Col M
+                Balance_Due: bRow[13],      // Col N
+                OR_Number: bRow[14],        // Col O
+                Payment_Date: bRow[15],     // Col P
+                Receipt_PDF: bRow[16]       // Col Q
+              });
+            }
+          }
+          
           return ContentService
             .createTextOutput(JSON.stringify({ status: "success", fullName: matchedFullName, data: results }))
             .setMimeType(ContentService.MimeType.JSON);
-        } else {
-          return ContentService
-            .createTextOutput(JSON.stringify({ status: "error", message: "Invalid credentials" }))
-            .setMimeType(ContentService.MimeType.JSON);
         }
-      }
-      ========================================================================
+        ========================================================================
     -->
 
 </body>
